@@ -1,20 +1,19 @@
 import sqlite3
 import sys
-
-from PyQt6 import uic
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtWidgets import QMainWindow, QTableWidgetItem
+from MainWindow import Ui_MainWindow
+from addEditCoffeeForm import AddWindow
 
 
-class CoffeMainWindow(QMainWindow):
+class CoffeMainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi("main.ui", self)
-        self.con = sqlite3.connect("coffee.sqlite")
+        self.setupUi(self)
+        self.con = sqlite3.connect("data\\coffee.sqlite")
         self.change_btn.clicked.connect(self.open_edit)
         self.modified = {}
         self.titles = None
-        # self.id_change = []
         self.update_result()
 
     def update_result(self):
@@ -32,12 +31,12 @@ class CoffeMainWindow(QMainWindow):
         self.coffee_edit.show()
 
 
-class ChangeWindow(QMainWindow):
+class ChangeWindow(QMainWindow, AddWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.parent = parent
-        uic.loadUi("addEditCoffeeForm.ui", self)
-        self.con = sqlite3.connect("coffee.sqlite")
+        self.setupUi(self)
+        self.con = sqlite3.connect("data\\coffee.sqlite")
         self.load_btn.clicked.connect(self.load_res)
         self.table_coffee_id.itemChanged.connect(self.item_changed)
         self.save_btn.clicked.connect(self.save_results)
